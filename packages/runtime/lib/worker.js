@@ -16,8 +16,6 @@ const globalDispatcher = new FastifyUndiciDispatcher({
 const pino = require('pino')
 const { isatty } = require('tty')
 
-const applications = new Map()
-
 delete globalThis.LOADER_PORT
 setGlobalDispatcher(globalDispatcher)
 
@@ -47,6 +45,7 @@ process.once('unhandledRejection', (err) => {
 async function main () {
   const { services } = workerData.config
 
+  const applications = new Map()
   for (let i = 0; i < services.length; ++i) {
     const service = services[i]
     const app = new PlatformaticApp(service, loaderPort, logger)
@@ -54,9 +53,8 @@ async function main () {
     applications.set(service.id, app)
   }
 
-  const runtime = new RuntimeApi(applications, globalDispatcher)
-  runtime.startListening(parentPort)
-
+  const runtimeApi = new RuntimeApi(applications, globalDispatcher)
+  runtimeApi.startListening(parentPort)
   parentPort.postMessage('plt:init')
 }
 

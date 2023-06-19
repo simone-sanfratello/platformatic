@@ -24,9 +24,13 @@ class RuntimeApiClient extends EventEmitter {
     return this.#sendCommand('plt:start-services')
   }
 
+  async stop () {
+    await this.#sendCommand('plt:stop-services')
+  }
+
   async close () {
     await this.#sendCommand('plt:stop-services')
-    await once(this.#worker, 'exit')
+    await this.#sendClose()
   }
 
   async restart () {
@@ -70,6 +74,11 @@ class RuntimeApiClient extends EventEmitter {
 
     return JSON.parse(data)
   }
+
+  async #sendClose () {
+    this.#worker.postMessage({ command: 'plt:close' })
+    await once(this.#worker, 'exit')
+  }
 }
 
 class RuntimeApi {
@@ -85,12 +94,12 @@ class RuntimeApi {
     parentPort.on('message', async (message) => {
       const command = message?.command
       if (command) {
-        const res = await this.#executeCommand(message)
-        parentPort.postMessage(res)
-
-        if (command === 'plt:stop-services') {
+        if (command === 'plt:close') {
           process.exit() // Exit the worker thread.
         }
+
+        const res = await this.#executeCommand(message)
+        parentPort.postMessage(res)
         return
       }
       await this.#handleProcessLevelEvent(message)

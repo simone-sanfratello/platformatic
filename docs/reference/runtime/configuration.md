@@ -38,6 +38,7 @@ Configuration settings are organized into the following groups:
 - [`entrypoint`](#entrypoint) **(required)**
 - [`hotReload`](#hotReload)
 - [`allowCycles`](#allowCycles)
+- [`dashboard`](#dashboard)
 
 Configuration settings containing sensitive data should be set using
 [configuration placeholders](#configuration-placeholders).
@@ -109,6 +110,14 @@ not start any applications.
 
 If `allowCycles` is `true`, the topological sort is skipped, and the
 microservices are started in the order specified in the configuration file.
+
+### `dashboard`
+
+An optional object that configures the Platformatic Dashboard. If this object
+is not provided, the Platformatic Dashboard will not be started.
+
+- **`hostname`** (`string`) - The host for the Platformatic Dashboard. Default: `127.0.0.1`.
+- **`port`** (`number`) - The port that the Platformatic Dashboard. Default: `4042`.
 
 ## Environment variable placeholders
 

@@ -7,6 +7,7 @@ const closeWithGrace = require('close-with-grace')
 const { loadConfig } = require('@platformatic/service')
 const { platformaticRuntime } = require('./config')
 const { RuntimeApiClient } = require('./api.js')
+const { createDashboard } = require('./dashboard')
 const kLoaderFile = pathToFileURL(join(__dirname, 'loader.mjs')).href
 const kWorkerFile = join(__dirname, 'worker.js')
 const kWorkerExecArgv = [
@@ -33,8 +34,11 @@ async function startWithConfig (configManager) {
     workerData: { config }
   })
 
+  let dashboard = null
+
   worker.on('exit', () => {
     configManager.fileWatcher?.stopWatching()
+    dashboard?.close()
   })
 
   worker.on('error', () => {
@@ -59,7 +63,30 @@ async function startWithConfig (configManager) {
   await once(worker, 'message') // plt:init
 
   const runtimeApiClient = new RuntimeApiClient(worker)
+
+  if (config.dashboard) {
+    dashboard = await startDashboard(config.dashboard, runtimeApiClient)
+    runtimeApiClient.dashboard = dashboard
+  }
+
   return runtimeApiClient
+}
+
+async function startDashboard (dashboardConfig, runtimeApiClient) {
+  const { hostname, port, ...config } = dashboardConfig
+
+  try {
+    const dashboard = await createDashboard(config, runtimeApiClient)
+    await dashboard.listen({
+      host: hostname ?? '127.0.0.1',
+      port: port ?? 4042
+    })
+    return dashboard
+  /* c8 ignore next 4 */
+  } catch (err) {
+    console.error(err)
+    process.exit(1)
+  }
 }
 
 module.exports = { start, startWithConfig }

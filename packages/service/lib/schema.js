@@ -618,16 +618,22 @@ const openapi = {
   }]
 }
 
+const graphqlBase = {
+  type: 'object',
+  properties: {
+    graphiql: {
+      type: 'boolean'
+    }
+  },
+  additionalProperties: false
+}
+
 const graphql = {
   anyOf: [{
-    type: 'boolean'
+    ...graphqlBase,
+    additionalProperties: false
   }, {
-    type: 'object',
-    properties: {
-      graphiql: {
-        type: 'boolean'
-      }
-    }
+    type: 'boolean'
   }]
 }
 
@@ -705,6 +711,7 @@ module.exports.plugins = plugins
 module.exports.watch = watch
 module.exports.openApiDefs = openApiDefs
 module.exports.openApiBase = openApiBase
+module.exports.graphqlBase = graphqlBase
 module.exports.clients = clients
 
 if (require.main === module) {

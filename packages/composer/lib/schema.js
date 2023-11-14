@@ -66,6 +66,7 @@ const graphqlComposerOptions = {
     ...graphqlBase.properties
     // TODO
     // defaultArgsAdapter: { type: 'function' }
+    // extend: { schema, resolvers }
   }
   // additionalProperties: false
 }

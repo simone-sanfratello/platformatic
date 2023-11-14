@@ -98,3 +98,5 @@ test('graphiql should be disabled on composer by default', async t => {
   const res = await request(`${composerHost}/graphiql`)
   assert.strictEqual(res.statusCode, 404, '/graphiql response')
 })
+
+// TODO extend option

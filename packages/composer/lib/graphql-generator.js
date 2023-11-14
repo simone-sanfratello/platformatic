@@ -2,6 +2,7 @@
 
 const fp = require('fastify-plugin')
 const mercurius = require('mercurius')
+const deepmerge = require('@fastify/deepmerge')()
 const { fetchGraphqlSubgraphs } = require('./graphql-fetch')
 
 async function composeGraphql (app, opts) {
@@ -22,6 +23,17 @@ async function composeGraphql (app, opts) {
       const graphqlSupergraph = await fetchGraphqlSubgraphs(services, opts.graphql)
       graphqlConfig.schema = graphqlSupergraph.sdl
       graphqlConfig.resolvers = graphqlSupergraph.resolvers
+
+      // TODO also in watching
+      if (opts.graphql?.extend) {
+        if (opts.graphql.extend.schema) {
+          graphqlConfig.schema += '\n'+opts.graphql.extend.schema
+        }
+        if (opts.graphql.extend.resolvers) {
+          deepmerge(graphqlConfig.resolvers, opts.graphql.extend.resolvers)          
+        }
+      }
+    
       app.graphqlSupergraph = graphqlSupergraph
     } catch (err) {
       // TODO spy test

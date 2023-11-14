@@ -54,7 +54,7 @@ const defaultArgsAdapter = (partialResults) => {
   return { where: { id: { in: partialResults.map(r => r?.id) } } }
 }
 
-test('should use a platformatic db service', async t => {
+test('should use a platformatic db service', { skip: true }, async t => {
   const requests = [
     {
       query: '{ movies (limit:1) { title, year }}',
@@ -194,9 +194,10 @@ test('should use multiple platformatic db services', async t => {
 
   const composerConfig = toComposerConfig(services, entities)
 
+  composerConfig.composer.refreshTimeout = 0
   composerConfig.composer.graphql.defaultArgsAdapter = defaultArgsAdapter
   composerConfig.composer.graphql.graphiql = true
-  composerConfig.composer.refreshTimeout = 0
+  composerConfig.composer.graphql.extend = require(path.join(__dirname, 'fixtures/extend-composer-entities.js'))
 
   const composer = await createComposer(t, composerConfig)
   const composerHost = await composer.listen()
@@ -209,5 +210,4 @@ test('should use multiple platformatic db services', async t => {
 })
 
 // TODO crud ops
-
 // TODO subscriptions

@@ -27,7 +27,7 @@ async function fetchOpenApiSchema (service) {
   return schema
 }
 
-export default async function fetchOpenApiSchemasCli (_args) {
+export default async function fetchOpenApiSchemas (_args) {
   const logger = pino(pretty({
     translateTime: 'SYS:HH:MM:ss',
     ignore: 'hostname,pid'

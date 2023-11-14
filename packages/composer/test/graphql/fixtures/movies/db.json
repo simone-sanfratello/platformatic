@@ -11,10 +11,5 @@
   "migrations": {
     "dir": "./migrations",
     "autoApply": true
-  },
-  "plugins": {
-    "paths": [
-      "./extends.js"
-    ]
   }
 }

@@ -244,7 +244,7 @@
         return paths.join('/').replace(/\/+/g, '/')
       }
 
-      fetch('/_platformatic_versions')
+      fetch('/_services')
         .then(response => response.json())
         .then(({openapi, graphql}) => {
           if(graphql) {

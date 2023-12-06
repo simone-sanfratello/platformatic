@@ -11,7 +11,7 @@ module.exports = async (app, opts) => {
 
   app.route({
     method: 'GET',
-    path: '/_platformatic_versions',
+    path: '/_services',
     schema: { hide: true },
     handler: () => {
       return {

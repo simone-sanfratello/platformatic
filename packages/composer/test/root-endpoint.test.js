@@ -47,7 +47,7 @@ test('should get graphiql and openapi state', async (t) => {
 
     const { statusCode, body } = await composer.inject({
       method: 'GET',
-      url: '/_platformatic_versions'
+      url: '/_services'
     })
 
     assert.strictEqual(statusCode, 200)

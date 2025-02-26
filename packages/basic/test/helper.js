@@ -247,6 +247,8 @@ export async function prepareRuntime (t, fixturePath, production, configFile, ad
   const root = resolve(temporaryFolder, basename(fixturePath) + '-' + Date.now())
   currentWorkingDirectory = root
 
+  console.log('\n\n\n', root, '\n\n\n')
+
   await createDirectory(root)
 
   // Copy the fixtures

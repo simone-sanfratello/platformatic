@@ -4,6 +4,7 @@ export function create () {
     const app = fastify()
 
     globalThis.platformatic.setCustomHealthCheck(async () => {
+        // ...
         return true
     })
     

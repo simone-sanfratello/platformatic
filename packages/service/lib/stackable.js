@@ -180,11 +180,11 @@ class ServiceStackable {
     this.customHealthCheck = check
   }
 
-  getCustomHealthCheck () {
+  async getCustomHealthCheck () {
     if (!this.customHealthCheck) {
       return true
     }
-    return this.customHealthCheck()
+    return await this.customHealthCheck()
   }
   
   // This method is not a part of Stackable interface because we need to register

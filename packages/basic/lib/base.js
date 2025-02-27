@@ -142,11 +142,11 @@ export class BaseStackable {
     this.customHealthCheck = check
   }
 
-  getCustomHealthCheck () {
+  async getCustomHealthCheck () {
     if (!this.customHealthCheck) {
       return true
     }
-    return this.customHealthCheck()
+    return await this.customHealthCheck()
   }
 
   setConnectionString (connectionString) {

@@ -71,6 +71,7 @@ export class BaseStackable {
       root: pathToFileURL(this.root).toString(),
       setOpenapiSchema: this.setOpenapiSchema.bind(this),
       setGraphqlSchema: this.setGraphqlSchema.bind(this),
+      setCustomHealthchecks: this.setCustomHealthchecks.bind(this),
       setConnectionString: this.setConnectionString.bind(this),
       setBasePath: this.setBasePath.bind(this),
       runtimeBasePath: this.runtimeConfig?.basePath ?? null,
@@ -134,6 +135,10 @@ export class BaseStackable {
 
   setGraphqlSchema (schema) {
     this.graphqlSchema = schema
+  }
+
+  setCustomHealthchecks (checks) {
+    this.customHealthchecks = checks
   }
 
   setConnectionString (connectionString) {

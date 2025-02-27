@@ -166,7 +166,15 @@ function setupITC (app, service, dispatcher) {
         } catch (err) {
           throw new errors.FailedToRetrieveHealthError(service.id, err.message)
         }
-      }
+      },
+
+      async getCustomHealthchecks () {
+        try {
+          return await app.stackable.getCustomHealthchecks()
+        } catch (err) {
+          throw new errors.FailedToRetrieveMetaError(service.id, err.message)
+        }
+      },      
     }
   })
 

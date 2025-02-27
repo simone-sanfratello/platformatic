@@ -94,5 +94,9 @@ class ComposerStackable extends ServiceStackable {
 
     return { id, url, local: url.endsWith('.plt.local') }
   }
+
+  async getCustomHealthchecks (checks) {
+    // TODO execute checks on all services
+  }
 }
 module.exports = { ComposerStackable, ensureServices }

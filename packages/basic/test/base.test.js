@@ -31,6 +31,7 @@ test('BaseStackable - should properly setup globals', async t => {
   platformatic.setOpenapiSchema('openapi')
   platformatic.setGraphqlSchema('graphql')
   platformatic.setBasePath('basePath')
+  // setCustomHealthchecks?
 
   deepStrictEqual(await stackable.getOpenapiSchema(), 'openapi')
   deepStrictEqual(await stackable.getGraphqlSchema(), 'graphql')

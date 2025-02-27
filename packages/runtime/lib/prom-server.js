@@ -82,6 +82,10 @@ async function startPrometheusServer (runtime, opts) {
         }
       },
     })
+
+    // TODO liveness
+    // runtime. create a fn similar to getWorkers to return getCustomHealthchecks results
+
   }
 
   await promServer.listen({ port, host })

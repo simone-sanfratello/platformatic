@@ -10,6 +10,11 @@ const DEFAULT_READINESS_SUCCESS_STATUS_CODE = 200
 const DEFAULT_READINESS_SUCCESS_BODY = 'OK'
 const DEFAULT_READINESS_FAIL_STATUS_CODE = 500
 const DEFAULT_READINESS_FAIL_BODY = 'ERR'
+const DEFAULT_LIVENESS_ENDPOINT = '/status'
+const DEFAULT_LIVENESS_SUCCESS_STATUS_CODE = 200
+const DEFAULT_LIVENESS_SUCCESS_BODY = 'OK'
+const DEFAULT_LIVENESS_FAIL_STATUS_CODE = 500
+const DEFAULT_LIVENESS_FAIL_BODY = 'ERR'
 
 async function startPrometheusServer (runtime, opts) {
   if (opts.enabled === false) {
@@ -76,6 +81,37 @@ async function startPrometheusServer (runtime, opts) {
         const ready = await checkReadiness(runtime)
 
         if (ready) {
+          reply.status(successStatusCode).send(successBody)
+        } else {
+          reply.status(failStatusCode).send(failBody)
+        }
+      },
+    })
+  }
+
+  if (opts.liveness !== false) {
+    // TODO runtime. create a fn similar to getWorkers to return getCustomHealthchecks results
+
+    async function checkLiveness (runtime) {
+      // TODO execute checks on all services
+      return true
+    }
+
+    const successStatusCode = opts.liveness?.success?.statusCode ?? DEFAULT_LIVENESS_SUCCESS_STATUS_CODE
+    const successBody = opts.liveness?.success?.body ?? DEFAULT_LIVENESS_SUCCESS_BODY
+    const failStatusCode = opts.liveness?.fail?.statusCode ?? DEFAULT_LIVENESS_FAIL_STATUS_CODE
+    const failBody = opts.liveness?.fail?.body ?? DEFAULT_LIVENESS_FAIL_BODY
+
+    promServer.route({
+      url: opts.liveness?.endpoint ?? DEFAULT_LIVENESS_ENDPOINT,
+      method: 'GET',
+      logLevel: 'warn',
+      handler: async (req, reply) => {
+        reply.type('text/plain')
+
+        const live = await checkLiveness(runtime)
+
+        if (live) {
           reply.status(successStatusCode).send(successBody)
         } else {
           reply.status(failStatusCode).send(failBody)
